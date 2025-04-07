@@ -15,5 +15,14 @@ export default () => ({
         user: process.env.DB_USER,
         pass: process.env.DB_PASS,
         port: process.env.DB_PORT
-    })
+    }),
+    hash:{
+        pass:process.env.HASH_PASS,
+        mult:process.env.HASH_MULT,
+    },
+    jwt:{
+        secret:process.env.JWT_SECRET,
+        time:process.env.JWT_TIME_LIFE
+    }
+
 });
