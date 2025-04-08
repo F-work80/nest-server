@@ -21,7 +21,7 @@ export class AuthService {
         return this.userService.createUser(dto)
     }
 
-    async loginUser(dto:LoginUserDTO):Promise<AuthUserResponse>{
+    async loginUser(dto:LoginUserDTO):Promise<any>{
 
         const existUser= await this.userService.findUserByEmail(dto.userEmail)
         if(!existUser) throw new BadRequestException(AppError.USER_NOT_EXIST)
@@ -31,16 +31,18 @@ export class AuthService {
         const validPass= await bcrypt.compare(dto.userPass,existUser.dataValues.userPass)
         if(!validPass) throw new BadRequestException(AppError.WRONG_EMAIL_OR_PASS)
 
-        const userData={
-            userName:existUser.dataValues.userName,
-            userEmail:existUser.dataValues.userEmail
-        }
+        // const userData={
+        //     userName:existUser.dataValues.userName,
+        //     userEmail:existUser.dataValues.userEmail
+        // }
+        const pubUser=await this.userService.publicUser(dto.userEmail)//
+        const token=await this.tokenService.genJwtToken(pubUser)//userData
 
-        const token=await this.tokenService.genJwtToken(userData)
+        // console.log(pubUser?.dataValues)
+        const user = {pubUser,token}
+        // console.log(res)
 
-        const pubUser=await this.userService.publicUser(dto.userEmail)
-
-        return {...pubUser?.dataValues,token}
+        return user
 
 
     }

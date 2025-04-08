@@ -5,6 +5,7 @@ import * as bcrypt from "bcrypt"
 
 import {CreateUserDTO, DelUserDTO, UpdateUserDTO} from "./dto";
 import {where} from "sequelize";
+import {WatchList} from "../watchlist/models/watclist.model";
 
 
 @Injectable()
@@ -44,16 +45,23 @@ export class UserService {
     async delUser(email:string):Promise<boolean>{
         this.userReposytiry.destroy({where:{
             userEmail:email
-            }})
+            }
+        })
         return true
     }
     async publicUser(email:string){
 
-        const res = await this.userReposytiry.findOne({where:{
+        const res = await this.userReposytiry.findOne(
+            {where:{
                     userEmail:email,
                 // attributes:{exclude:['userEmail']}
 
-            }})
+            },
+            include:{
+                model:WatchList,
+                required:false
+            }
+        })
 // console.log(res)
 
         return res
