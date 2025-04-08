@@ -1,6 +1,7 @@
-import {Column, Model, Table} from "sequelize-typescript";
+import {Column, HasMany, Model, Table} from "sequelize-typescript";
 import {IsString} from "class-validator";
 import {Exclude} from "class-transformer";
+import {WatchList} from "../../watchlist/models/watclist.model";
 
 @Table
 export class User extends Model {
@@ -17,7 +18,10 @@ userPass:string;
 @Column
 userEmail:string;
 
-// @Column
-//     list:string;
+@HasMany(()=>WatchList,{
+    onDelete:'CASCADE',
+    onUpdate:'CASCADE',
+})
+watchList:WatchList[];
 }
 
